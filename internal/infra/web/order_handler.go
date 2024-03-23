@@ -27,7 +27,7 @@ func NewWebOrderHandler(
 	}
 }
 
-func (h *WebOrderHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *WebOrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	var dto usecase.OrderInputDTO
 	err := json.NewDecoder(r.Body).Decode(&dto)
 	if err != nil {
@@ -37,6 +37,20 @@ func (h *WebOrderHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	createOrder := usecase.NewCreateOrderUseCase(h.OrderRepository, h.OrderCreatedEvent, h.EventDispatcher)
 	output, err := createOrder.Execute(dto)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = json.NewEncoder(w).Encode(output)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *WebOrderHandler) GetOrders(w http.ResponseWriter, r *http.Request) {
+	getOrders := usecase.NewGetOrdersUseCase(h.OrderRepository)
+	output, err := getOrders.Execute(0, 10, "asc")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
