@@ -3,42 +3,17 @@ Pós Go Expert desafio Clean Architecture
 
 ## Subir os serviços de banco de dados MySql e RabbitMq
 ```
-docker-compose up -d 
+make docker-up
+```
+
+## Rodar as migrations
+```
+make migrate-up
 ```
 
 ## Subir os servidores Http Grpc e GraphQl
 ```
-cd ./cmd/ordersystem/
-```
-```
-go run main.go wire_gen.go
-```
-
-## Preparar o banco de dados (docker)
-
-### Pega o nomes do container MySql
-```
-docker container ls
-```
-
-### Entra no container MySql
-```
-docker exec -it mysql bash
-```
-### Bash MySql
-```
-bash-4.2# mysql -uroot -p (senha root)
-mysql> show databases;
-mysql> use orders;
-mysql> show tables;
-```
-
-### Cria a tabela (bash MySql)
-```
-CREATE TABLE orders (id varchar(255) NOT NULL, price float NOT NULL, tax float NOT NULL, final_price float NOT NULL, PRIMARY KEY (id));
-```
-``` 
-show tables;
+make run-app
 ```
 ## Consumindo a API
 
