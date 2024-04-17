@@ -1,23 +1,29 @@
 # go-expert-desafio-clean-architecture
 Pós Go Expert desafio Clean Architecture
 
-## Subir os serviços de banco de dados MySql e RabbitMq
+## 1 - Subir os serviços de banco de dados MySql e RabbitMq
 ```
 make docker-up
 ```
 
-## Rodar as migrations
+## 2 - Rodar as migrations
 ```
 make migrate-up
 ```
 
-## Subir os servidores Http Grpc e GraphQl
+## 3 - Subir os servidores
 ```
 make run-app
 ```
-## Consumindo a API
+### Portas disponíveis para cada servidor
+- Web Server: **8000**
+- Grpc Server: **50051**
+- GraphQl Server: **8080**
 
-### 1 - Via Http (http://localhost:8000/order)
+## Consumindo os servidores
+
+### Web Server
+#### Utilizar a extensão REST Client
 ```
 cd ./api/create_order.http
 ```
@@ -25,7 +31,8 @@ cd ./api/create_order.http
 cd ./api/get_orders.http
 ```
 
-### 2 - Via Grpc (bash Evans)
+### Grpc server
+#### Utilizar o Evans para as requisições
 ```
 evans -r repl
 ```
@@ -36,9 +43,10 @@ call CreateOrder
 call GetOrders
 ```
 
-### 3 - Via GraphQl (http://localhost:8080)
+### GraphQl Server
+#### Utilizar Playground do GraphQl
 
-#### 3.1 - Mutation
+### Mutation
 ```
 mutation createOrder{
   createOrder(input: {id: "c", Price: 300.0, Tax: 2.0}) {
@@ -49,6 +57,7 @@ mutation createOrder{
   } 
 }
 ```
+### Query
 ```
 query getOrders{
   getOrders {
@@ -59,20 +68,3 @@ query getOrders{
   } 
 }
 ```
-## Tools
-
-### Wire (na pasta do arquivo wire.go)
-```
-wire 
-```
-
-### Grpc
-```
-protoc --go_out=. --go-grpc_out=. internal/infra/grpc/protofiles/order.proto
-```
-
-### GraphQl
-```
-go run github.com/99designs/gqlgen generate
-```
-
