@@ -17,3 +17,7 @@ migrate-down:
 .PHONY: run-app
 run-app:
 	go run "./cmd/ordersystem/main.go" "./cmd/ordersystem/wire_gen.go"
+
+.PHONY: protoc
+run-protoc:
+	protoc --go_out=. --go-grpc_out=. internal/infra/grpc/protofiles/order.proto

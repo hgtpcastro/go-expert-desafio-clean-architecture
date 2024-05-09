@@ -37,15 +37,39 @@ func (r *OrderRepository) GetTotal() (int, error) {
 
 func (r *OrderRepository) FindAll(page, limit int, sort string) ([]entity.Order, error) {
 	var orders []entity.Order
-	stmt, err := r.Db.Prepare("SELECT id, price, tax, final_price FROM orders ORDER BY id " + sort + " LIMIT ? OFFSET ?")
+	sql := "SELECT id, price, tax, final_price FROM orders"
+
+	if page <= 0 {
+		page = 1
+	}
+
+	pageAux := (page - 1)
+
+	if sort != "" {
+		sql += " ORDER BY " + sort
+	}
+
+	var args []interface{}
+
+	if limit > 0 && page >= 0 {
+		args = append(args, limit, pageAux)
+		sql += " LIMIT ? OFFSET ?"
+	} else {
+		args = nil
+	}
+
+	stmt, err := r.Db.Prepare(sql)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := stmt.Query(limit, page)
+	defer stmt.Close()
+
+	rows, err := stmt.Query(args...)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
+
 	for rows.Next() {
 		var order entity.Order
 		if err := rows.Scan(&order.ID, &order.Price, &order.Tax, &order.FinalPrice); err != nil {
