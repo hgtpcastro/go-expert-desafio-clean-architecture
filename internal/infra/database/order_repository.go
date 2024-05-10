@@ -51,7 +51,7 @@ func (r *OrderRepository) FindAll(page, limit int, sort string) ([]entity.Order,
 
 	var args []interface{}
 
-	if limit > 0 && page >= 0 {
+	if limit > 0 && page > 0 {
 		args = append(args, limit, pageAux)
 		sql += " LIMIT ? OFFSET ?"
 	} else {

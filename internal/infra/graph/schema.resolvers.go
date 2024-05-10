@@ -31,7 +31,7 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input *model.OrderIn
 }
 
 func (r *queryResolver) GetOrders(ctx context.Context) ([]*model.Order, error) {
-	output, err := r.GetOrdersUseCase.Execute(0, 10, "asc")
+	output, err := r.GetOrdersUseCase.Execute(0, 0, "")
 	if err != nil {
 		return nil, err
 	}

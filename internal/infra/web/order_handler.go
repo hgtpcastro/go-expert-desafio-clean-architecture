@@ -50,7 +50,7 @@ func (h *WebOrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 
 func (h *WebOrderHandler) GetOrders(w http.ResponseWriter, r *http.Request) {
 	getOrders := usecase.NewGetOrdersUseCase(h.OrderRepository)
-	output, err := getOrders.Execute(0, 10, "asc")
+	output, err := getOrders.Execute(0, 0, "")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
